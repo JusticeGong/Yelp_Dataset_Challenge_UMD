@@ -1,5 +1,9 @@
 import pandas as pd
+import sys  
 
-chenckin = pd.read_json('/Users/Jacob/Desktop/Python/yelp_dataset_challenge_round9/yelp_academic_dataset_checkin.json', lines=True)
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
-print(chenckin.head())
+chenckin = pd.read_json('XXX.json', lines=True, encoding='utf-8')
+
+print(chenckin.head(50))
