@@ -16,7 +16,7 @@ with open('D:/Workplace/BigData/yelp_academic_dataset_review_trim.json', 'w', en
                 del element['cool']
             if 'type' in element:
                 del element['type']
-            dest_file.write(json.dumps(element))
+            dest_file.write(json.dumps(element)+"\n")
 
 
 
