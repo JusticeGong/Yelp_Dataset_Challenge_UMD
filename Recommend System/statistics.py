@@ -8,15 +8,16 @@ with open('D:/Workplace/BigData/yelp_academic_dataset_review_trim.json', 'r', en
     r = 0
     for line in f:
         l = json.loads(line.strip())
-        print(l['stars'])
-        if l['user_id'] not in uid:
+        # print(l['stars'])
+        if list(l['user_id']) not in uid:
             u = u + 1
-            uid.append(str(l['user_id']))
-        if l['business_id'] not in uid:
+            uid.__add__(list(l['user_id']))
+        if list(l['business_id']) not in uid:
             b = b + 1
-            bid.append(str(l['business_id']))
+            bid.__add__(list(l['business_id']))
         r = r + 1
-    print(u,b,r)
+        if r == 1000000:
+            print(u,b,r)
     f.close()
 
     # with open('D:/Workplace/BigData/yelp_academic_dataset_review - Copy.json', 'r', encoding="utf8") as source_file:
