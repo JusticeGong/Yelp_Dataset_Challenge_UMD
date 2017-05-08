@@ -1,12 +1,7 @@
-import json
-i = 0
-with open('D:/Workplace/BigData/estimate.json', 'w', encoding="utf8") as dest_file:
-    with open('D:/Workplace/BigData/yelp_academic_dataset_business_trim.json', 'r', encoding="utf8") as source_file:
-        for line in source_file:
-            element = json.loads(line.strip())
-            dest_file.write(json.dumps(element)+"\n")
-            i = i + 1
-            if i >= 10000:
-                break
-        source_file.close()
-    dest_file.close()
+
+import random
+with open('D:/Workplace/BigData/network.txt', 'w', encoding="utf8") as f:
+    for i in range(1,11):
+        for j in random.sample([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], random.randint(1,10)):
+            f.write("page" + str(i) + "\t" + "page" + str(j) + "\n")
+    f.close()
