@@ -3,7 +3,7 @@ import pandas as pd
 
 col_name = ['id', 'phone', 'credit_card_id', 'unknown', 'address', 'card', 'gender', 'age',\
 			'brand', 'product', 'amount', 'price', 'store', 'time', 'date']
-df = pd.read_csv('/Users/jacob/Desktop/Python/Guangxi Market/data.txt', sep=',',\
+df = pd.read_csv('D:/data.txt', sep=',',\
                  names=col_name, usecols=['phone', 'store', 'date'])
 
 df['phone'] = df['phone'].astype('str')
@@ -19,4 +19,4 @@ cat_columns = df.select_dtypes(['category']).columns
 df[cat_columns] = df[cat_columns].apply(lambda x: x.cat.codes)
 print(df['store'].nunique())
 
-df.to_csv('/Users/jacob/Desktop/Python/Guangxi Market/trimed_data.txt', index=False)
+df.to_csv('D:/tdata.txt', index=False)

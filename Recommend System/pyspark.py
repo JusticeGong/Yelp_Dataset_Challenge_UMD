@@ -17,7 +17,7 @@ ratings = data.map(lambda l: l.split(','))\
 # Build the recommendation model using Alternating Least Squares
 # for numIterations in range (1,16):
 rank = 10
-numIterations = 15
+numIterations = 10
 model = ALS.train(ratings, rank, numIterations)
 # Evaluate the model on training data
 testdata = ratings.map(lambda p: (p[0], p[1]))

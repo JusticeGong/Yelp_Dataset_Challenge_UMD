@@ -26,7 +26,7 @@ def split_training_testing(X, y):
           
     return (X_train, y_train, X_test, y_test)
 
-X, Y = load_csv('/Users/jacob/Desktop/Python/Guangxi Market/trimed_data.txt',\
+X, Y = load_csv('D:/tdata.txt',\
                 target_column=1, has_header=True, categorical_labels=True, n_classes=25)
 trainX, trainY, testX, testY = split_training_testing(X, Y)
 
@@ -46,6 +46,6 @@ net = tflearn.regression(net, optimizer='adam', learning_rate=0.001,
 # Training
 model = tflearn.DNN(net)
 model.fit(trainX, trainY, validation_set=(testX, testY), show_metric=True, n_epoch=5)
-model.save('/Users/jacob/Desktop/Python/Guangxi Market/model_1')
+model.save('D:/gz_model')
 
 accuracy = model.evaluate(testX, testY)
