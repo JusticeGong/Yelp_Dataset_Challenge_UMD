@@ -1,53 +1,43 @@
-def UGL1(a):
-    if a == 1:
-        return 0
-    elif a == 2:
-        return 1
-    elif a >= 3 and a <= 5:
-        return 2
+import re
+for i in range(1,4):
+    if i == 1:
+        j = 4
+    elif i == 2:
+        j = 6
     else:
-        return 3
+        j = 8
+    for j in range(1, j):
+        n = 0
+        u1 = []
+        u2 = []
+        path1 = 'D:/Workplace/BigData/DataTrim/UserGroupList/SubModelDataset' + str(i) + str(j) + '.txt'
+        if j != 1:
+            path2 = 'D:/Workplace/BigData/DataTrim/UserGroupList/SubModelDataset' + str(i) + str(j-1) + '.txt'
+        else:
+            path2 = 'D:/Workplace/BigData/DataTrim/review_restaurant_trim_usercount.txt'
+        with open(path1, 'r', encoding='utf8') as rf1:
+            for line in rf1:
+                line = line.strip()
+                a = line.split(',')
+                u1.append(str(a[0]))
+            rf1.close()
+        with open(path2, 'r', encoding='utf8') as rf2:
+            for line in rf2:
+                line = line.strip()
+                a = line.split(',')
+                u2.append(str(a[0]))
+            rf2.close()
+        u = list(set(u1) ^ set(u2))
+        path = 'D:/Workplace/BigData/DataTrim/UserGroupList/QueryList' + str(i) + str(j) + '.txt'
+        with open(path, 'w', encoding='utf8') as wf:
+            u = str(u)
+            u = re.sub("'", '', u)
+            u = u.replace('[', '')
+            u = u.replace(']', '')
+            wf.write(str(u))
+            wf.close()
+        print((i,j))
 
-def UGL2(a):
-    if a == 1:
-        return 0
-    elif a == 2:
-        return 1
-    elif a == 3:
-        return 2
-    elif a >= 4 and a <= 6:
-        return 3
-    elif a >= 7 and a <= 23:
-        return 4
-    else:
-        return 5
-
-def UGL3(a):
-    if a == 1:
-        return 0
-    elif a == 2:
-        return 1
-    elif a == 3:
-        return 2
-    elif a == 4:
-        return 3
-    elif a >= 5 and a <= 6:
-        return 4
-    elif a >= 7 and a <= 10:
-        return 5
-    elif a >= 11 and a <= 29:
-        return 6
-    else:
-        return 7
-
-def UGL(a):
-    r = [0,0,0]
-    r[0] = UGL1(a)
-    r[1] = UGL2(a)
-    r[2] = UGL3(a)
-    return r
-
-n = 0
 
 #生成UserList
 # with open('D:/Workplace/BigData/DataTrim/usercount_clean.txt', 'r', encoding="utf8") as rf:
@@ -66,11 +56,12 @@ n = 0
 #     rf.close()
 
 
-#生成QueryList
-# with open('D:/Workplace/BigData/DataTrim/usercount_clean.txt', 'r', encoding="utf8") as rf:
+# 生成QueryList
+# with open('D:/Workplace/BigData/DataTrim/review_restaurant_trim_usercount.txt', 'r', encoding="utf8") as rf:
 #     for line in rf:
+#         line = line.strip()
 #         a = line.split(',')
-#         b = UGL(int(a[1]))
+#         b = UGL(int(a[4]))
 #         for i in range(1,4):
 #             if b[0] != 0:
 #                 path = 'D:/Workplace/BigData/DataTrim/UserGroupList/Query' + str(i) + str(b[i-1]) + '.txt'
@@ -83,7 +74,3 @@ n = 0
 
 
 
-
-#12万分组，List1(1),List2(2),List3(3,6)，List4(7,max)
-#6万分组，List1(1),List2(2),List3(3),List4(4,6)，List5(7,23),List6(24,max)
-#3万分组，List1(1),List2(2),List3(3),List4(4),List5(5,6), List6(7,10), List7(11,29),List8(30,max)
