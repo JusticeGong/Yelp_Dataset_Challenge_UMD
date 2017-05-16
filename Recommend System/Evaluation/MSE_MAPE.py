@@ -1,4 +1,4 @@
-index = ['00','13','25','37']
+index = ['13','25','37']
 MSE = {}
 MAPE = {}
 
@@ -7,7 +7,7 @@ for i in index:
     mapes = 0
     n = 0
     j = int(i[1])
-    ipath = 'D:/Workplace/BigData/DataTrim/Evaluation/MSE/ModelOutput'+i+'.txt'
+    ipath = 'D:/Workplace/BigData/DataTrim/Evaluation/MSE/L3MeanModelOutput'+i+'.txt'
     with open(ipath, 'r', encoding='utf8') as r:
         for line in r:
             line = line.strip()
