@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "customCSS.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default navbar-fixed-top customNavBar">
+    <div class="container-fluid">
+        <p class="navbar-text customNavBarLink"><a href="{% url 'index' %}" class="navbar-link"> Home</a></p>
+        <p class="navbar-text customNavBarLink"><a href="{% url 'googlemap' %}" class="navbar-link">Map View</a></p>
+  </div>
+</nav>
+
+<div class="jumbotron text-center">
+        <h1>Yelp Dataset Challenge</h1>
+</div>
+
+    <!--Watershed List-->
+   <div class="container">
+      <h3 class="page-header">User List:</h3>
+      <em>Click on userID to see the recommend</em>
+        {% if all_uID %}
+        <div class="list-group">
+            {% for user in all_uID %}
+            <div class="list-group-item">
+                <a href="http://127.0.0.1:8000/yelp/map" class="h4">{{ user }}</a>
+
+            </div>
+            {% endfor %}
+        </div>
+         {% else %}
+            <em> You have no watersheds in your database </em>
+        {% endif %}
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="container">
+          <div class="col-md-6 col-sm-6 footerleft ">
+            <div class="title-footer text-center"> About the Project</div>
+            <p>This web application was made as part of the class Big Data, taught at the University of Maryland - Smith School of Business. It is the final project and served as a learning platform for the students to test and understand the different technologies. </p>
+            <p>Through out the project, we learned the how to condunt big data research. Some of the techonologies and tools used in this app include Django, Python, ArcGis, R.</p>
+
+
+          </div>
+          <div class="col-md-6 col-sm-6 paddingtop-bottom text-center">
+            <h6 class="title-footer">About us</h6>
+            <ul class="footer-ul text-center">
+              <li><a href="https://www.linkedin.com/in/zheng-gong-78396777/">Zheng Gong<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/gonche1124/"> Lulu Zhang<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/gonche1124/"> Yiding Xiong<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+            </ul>
+          </div>
+      </div>
+    </footer>
+</body>
+</html>
+

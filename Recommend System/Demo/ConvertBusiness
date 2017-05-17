@@ -1,0 +1,46 @@
+import json
+import re
+import MySQLdb
+def sti(s):
+    return str(abs(hash(str(s))) % (10 ** 8))
+
+def writeb(q):
+    # mysql -h watershed.cand6uyaamhk.us-east-1.rds.amazonaws.com -P 8000 -u smart_city -p
+
+    # The password is smartcity2
+
+    # First, create a DB connection:
+    # try:
+        connection = MySQLdb.connect(
+            host='watershed.cand6uyaamhk.us-east-1.rds.amazonaws.com',
+            user='smart_city',
+            passwd='smartcity2',
+            db='yelp',
+            port=8000)
+
+        # Next, obtain a cursor:
+        cursor = connection.cursor()
+
+        # Now we can execute SQL code via our cursor:
+        cursor.execute("insert into business value" + q)
+
+
+
+n = 0
+with open('D:/Workplace/BigData/DataTrim/Demo/business.txt', 'w', encoding="utf8") as dest_file:
+    with open('D:/Workplace/BigData/DataTrim/business_restaurant_trim.json', 'r', encoding="utf8") as source_file:
+        for line in source_file:
+            a = json.loads(line.strip())
+            # a = str(a).replace("'", "")
+            bid = sti(a['business_id'])
+            # q = "('" + bid + "','" + a['name'] + "'," + str(a['latitude']) + "," + str(a['longitude']) + ',' + a['state'] + "')"
+            # q = "('" + bid + "','" + a['name'] + "'," + str(a['latitude']) + "," + str(a['longitude']) + ",'" + a['address'].replace("'", "") + "','" + a['city'] + "','" + a['state'] + "','" + a['postal_code'] + "')"
+            q = bid + "," + a['name'] + "," + str(a['latitude']) + "," + str(a['longitude']) + "," + a[
+                'address'] + "," + a['city'] + "," + a['state'] + "," + a['postal_code']
+            # q = q.replace("'", "")
+            # q = q.split(',')
+            # qq = "('" + str(q[0]) + "','" + str(q[1]) + "','" + str(q[2]) + "','" + str(q[3]) + "','" + str(q[4]) + "','" + str(q[5]) + "','" + str(q[6]) + "','" + str(q[7]) + "')"
+            dest_file.write(q + '#')
+            # writeb(q)
+            n = n + 1
+            print(n)

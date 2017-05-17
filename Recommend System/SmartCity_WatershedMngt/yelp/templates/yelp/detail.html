@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>detail</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static "customCSS.css" %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--Scripts-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.20/esri/css/esri.css">
+    <script src="https://js.arcgis.com/3.20/"></script>
+</head>
+
+<body>
+<!-- NAVIGATION -->
+<nav class="navbar navbar-default navbar-fixed-top customNavBar">
+    <div class="container-fluid">
+        <p class="navbar-text customNavBarLink"><a href="{% url 'watershed:GenerateGeoRSS' %}" class="navbar-link"> Home</a></p>
+
+        <p class="navbar-text customNavBarLink"><a href="{% url 'watershed:twentymindrive_map' %}" class="navbar-link">20-Min-Travel</a></p>
+        <p class="navbar-text customNavBarLink"><a href="{% url 'watershed:waterlevel_map' %}" class="navbar-link">Maintainance Service</a></p>
+        <p class="navbar-text navbar-right customNavBarLink">
+            <a class="navbar-link  " href="http://smartcities.mbrxdram5u.us-west-2.elasticbeanstalk.com/waterevent/"> Stormwater System</a></p>
+  </div>
+</nav>
+
+    <div class="jumbotron text-center">
+        <h1>Watershed Management System</h1>
+    </div>
+    <div class="container-fluid">
+      
+    
+    <div class="row">    
+    <!--Detail view-->
+    
+        <div class="page-header text-center">
+          <h1>{{ watershed.name }}</h1>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="panel panel-primary">
+            <!-- Default panel contents -->
+                <div class="panel-heading text-center">Watershed Information</div>
+                <table class="table table-striped table-condensed">
+                        {% for name, value in watershed.attrs %}
+                         <tr>
+                            <td class="text-right"><strong>{{name}}</strong></td> 
+                            <td>{{value}}</td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+      
+
+         <!--Other Info-->
+            <div role="tabpanel">
+
+                  <!-- Nav tabs -->
+                  <ul class="nav nav-tabs" role="tablist">
+                      <li role="presentation" class="active">
+                          <a href="#features" aria-controls="Features" role="tab" data-toggle="tab">Features</a>
+                      </li>
+                      <li role="presentation">
+                          <a href="#maintenance" aria-controls="maintenance" role="tab" data-toggle="tab">Maintenance</a>
+                      </li>
+                        <li role="presentation">
+                          <a href="#Observation" aria-controls="Observation" role="tab" data-toggle="tab">Observation</a>
+                      </li>
+                      <li role="presentation">
+                          <a href="#floraAndfauna" aria-controls="floraAndfauna" role="tab" data-toggle="tab">Flora and Fauna</a>
+                      </li>
+                      <li role="presentation">
+                          <a href="#WatershedPipe" aria-controls="WatershedPipe" role="tab" data-toggle="tab">Pipe</a>
+                      </li>
+                  </ul>
+              
+                  <!-- Tab panes -->
+                  <div class="tab-content">
+                      <!-- features -->
+                      <div role="tabpanel" class="tab-pane fade active" id="features">
+                        {% if manMadeFeatures  or naturalFeatures %}
+                          <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Type</th>
+                                  <th> More info</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% if manMadeFeatures %}
+                                  {% for item in manMadeFeatures %}
+                                    <tr>
+                                      <td>{{ item.name }}</td>
+                                      <td>Man Made</td>
+                                      <td>
+                                        <a href="{% url 'watershed:detail_manmadefeature' item.featureID %}" class="btn btn-info btn-xs active" role="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+
+                                      </td>
+                                    </tr>
+                                  {% endfor %}
+                                {% endif %}
+                                  {% if naturalFeatures %}
+                                    {% for item in naturalFeatures %}
+                                    <tr>
+                                      <td>{{ item.name }}</td>
+                                      <td>Natural</td>
+                                      <td>
+                                        <a href="{% url 'watershed:detail_naturalfeature' item.featureID %}" class="btn btn-info btn-xs active" role="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+
+                                      </td>
+                                    </tr>
+                                    {% endfor %}
+                                  {% endif %}
+
+                              </tbody>
+                          </table>
+                        {% else %}
+                          <p class="lead text-center"> No features  for this watershed </p>
+                        {% endif %}
+                        <div class="text-center">
+                          <a href="{% url 'watershed:manmadefeature_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Man made Feature</a>
+                          <a href="{% url 'watershed:naturalfeature_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Natural Feature</a>
+                        </div>
+
+                      </div>
+
+                      <!-- Maintenace Info -->
+                      <div role="tabpanel" class="tab-pane fade" id="maintenance">
+                          {% if maintenance %}
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Issue</th>
+                                  <th>Cost</th>
+                                  <th>Status</th>
+                                  <th> More info</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in maintenance %}
+                                    <tr>
+                                      <td>{{ item.issue }}</td>
+                                      <td>{{ item.cost }}</td>
+                                      <td>{{ item.status }}</td>
+                                      <td>
+                                        <a href="{% url 'watershed:detail_maintenance' item.maintenanceID %}" class="btn btn-info btn-xs active" role="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+
+                                      </td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          {% else %}
+                                <p class="lead text-center"> No Maintenance record for this watershed </p>
+                          {% endif %}
+                          <div class="text-center">
+                            <a href="{% url 'watershed:maintenance_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Maintenance</a>
+                          </div>
+                      </div>
+
+                      <!--Observations -->
+                      <div role="tabpanel" class="tab-pane fade" id="Observation">
+                        {% if observationV %}
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Test Type</th>
+                                  <th>Date</th>
+                                  <th>Test Level</th>
+                                  <th> More info</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in observationV %}
+                                    <tr>
+                                      <td>{{ item.testType }}</td>
+                                      <td>{{ item.date }}</td>
+                                      <td>{{ item.testLevel }}</td>
+                                      <td>
+                                        <a href="{% url 'watershed:detail_observation' item.observationID %}" class="btn btn-info btn-xs active" role="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+
+                                      </td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                        {% else %}
+                                <p class="lead text-center"> No Observations record for this watershed </p>
+                        {% endif %}
+                        <div class="text-center">
+                          <a href="{% url 'watershed:observation_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Observation</a>
+                        </div>
+                      </div>
+
+                      <!--Flora and Fauna -->
+                      <div role="tabpanel" class="tab-pane fade" id="floraAndfauna">
+                        {% if FloraAndFauna %}
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Native</th>
+                                  <th>Description</th>
+                                  <th>URL</th>
+                                  <th> More info</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in FloraAndFauna %}
+                                    <tr>
+                                      <td>{{ item.isNative }}</td>
+                                      <td>{{ item.description }}</td>
+                                      <td>{{ item.photoUrl }}</td>
+                                      <td>
+                                        <a href="{% url 'watershed:detail_ffinfo' item.ffInfoID %}" class="btn btn-info btn-xs active" role="button"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+                                      </td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                        {% else %}
+                                <h3 class="lead text-center">No Flora or Fauna record for this watershed</h3>
+                        {% endif %}
+                        <div class="text-center">
+                          <a href="{% url 'watershed:ffinfo_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Flora and Fauna</a>
+                        </div>
+                      </div>
+
+
+                      <!--Watershed_Pipe_Connection -->
+                      <div role="tabpanel" class="tab-pane fade" id="WatershedPipe">
+                        {% if WPConnection %}
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>ConnectionID</th>
+                                  <th>WatershedID</th>
+                                  <th>PipeID</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for item in WPConnection %}
+                                    <tr>
+                                      <td>{{ item.connectionID }}</td>
+                                      <td>{{ item.watershedID }}</td>
+                                      <td>{{ item.pipeID }}</td>
+                                    </tr>
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                        {% else %}
+                                <p class="lead text-center"> No pipe record for this watershed </p>
+                        {% endif %}
+                        <div class="text-center">
+                          <a href="{% url 'watershed:wpconnection_new' %}" class="btn btn-success btn-sm active text-center" role="button" aria-pressed="true"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Watershed-Pipe</a>
+                        </div>
+                      </div>
+
+
+                  </div>
+            </div>   
+        </div>
+
+        <!--Image-
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+            <img src="{{ watershed.watershed_logo }}" height="200px" width="100%">     
+        </div>-->
+
+        <!--Map-->
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style>
+              <div class="embed-container">
+                  <!--ArcGIS Online-->
+                <style>.embed-container {position: relative; padding-bottom: 80%; height: 0; max-width: 100%;} .embed-container iframe, .embed-container object, .embed-container iframe{position: absolute; top: 0; left: 0; width: 100%; height: 100%;} small{position: absolute; z-index: 40; bottom: 0; margin-bottom: -15px;}</style><div class="embed-container"><small><a href="//www.arcgis.com/apps/Embed/index.html?webmap=5a32e76dca6549b9b4d9ba7ac0e52f22&amp;extent=-79.1757,37.9494,-75.119,39.7461&amp;home=true&amp;zoom=true&amp;scale=true&amp;disable_scroll=true&amp;theme=light" style="color:#0000FF;text-align:left" target="_blank">View larger map</a></small><br><iframe width="500" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="Watershed Management" src="//www.arcgis.com/apps/Embed/index.html?webmap=5a32e76dca6549b9b4d9ba7ac0e52f22&amp;extent=-79.1757,37.9494,-75.119,39.7461&amp;home=true&amp;zoom=true&amp;scale=true&amp;disable_scroll=true&amp;theme=light"></iframe></div>
+                  <!--ArcGIS JavaScript API-->
+{#                  <body class="claro">#}
+{#                    <div id="map"></div>#}
+                  </body>
+              </div>
+        </div>
+    
+    
+    <br>
+    <br>
+    <br>
+
+    </div>
+    <br>
+    <br>
+    
+    
+<!-- FOOTER -->
+    <footer>
+      <div class="container">
+          <div class="col-md-6 col-sm-6 footerleft ">
+            <div class="title-footer text-center"> About the Project</div>
+            <p>This web application was made as part of the class Business Process Analysis, taught at the University of Maryland - Smith School of Business. It is the final project and served as a learning platform for the students to test and understand the different technologies. </p>
+            <p>Through out the project, we learned the agile methodology and did a total of 6 sprints. Some of the techonologies and tools used in this app include Django, Python, ArcGis, Amazon AWS and Bootstrap.</p>
+
+
+          </div>
+          <div class="col-md-6 col-sm-6 paddingtop-bottom text-center">
+            <h6 class="title-footer">About us</h6>
+            <ul class="footer-ul text-center">
+              <li><a href="https://www.linkedin.com/in/amiyakumardas/"> Amiya Das<br/> <i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/melissa-delcid-94380a8b/"> Melissa Delcid<br> <i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/kanchan-markandeya-041ba1b5/"> Kanchan Markandeya<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/yangmen/">Yang Men<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/zheng-gong-78396777/">Zheng Gong<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+              <li><a href="https://www.linkedin.com/in/gonche1124/"> Andres Gonzalez<br/><i class="fa fa-linkedin-square" style="font-size:24px"></i></a></li>
+            </ul>
+          </div>
+      </div>
+    </footer>
+
+
+
+<!--Javascript code-->
+{% block js %}
+    <script>
+        require(["esri/map", "esri/arcgis/utils", "dojo/domReady!"], function(Map, arcgisUtils) {
+{#            arcgisUtils.createMap("1a40fa5cc1ab4569b79f45444d728067", "mapDiv").then(function (response) {#}
+{#                map = response.map;#}
+{#            });#}
+
+            var map = new Map("map", {
+            center: [-76.942633, 38.984915],
+            zoom: 8,
+            basemap: "topo",
+            });
+
+        });
+    </script>
+
+{% endblock %}
+    </div>
+</body>
+</html>
